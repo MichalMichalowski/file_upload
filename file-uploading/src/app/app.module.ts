@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
 import { FilesGalleryComponent } from './components/files-gallery/files-gallery.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { FilesGalleryComponent } from './components/files-gallery/files-gallery.
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

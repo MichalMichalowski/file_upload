@@ -22,9 +22,6 @@ public class UploadingService {
                 if (!file.isEmpty()) {
                     byte[] bytes = file.getBytes();
                     Path pathToWrite = Paths.get(path + File.separator + file.getOriginalFilename());
-                    if (!Files.exists(pathToWrite)) {
-                        return "Provided path doesn't exist";
-                    }
                     Files.write(pathToWrite, bytes);
                 }
             }

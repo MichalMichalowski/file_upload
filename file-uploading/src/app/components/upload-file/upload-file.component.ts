@@ -25,6 +25,9 @@ export class UploadFileComponent implements OnInit {
   
   uploadFiles() {
     console.log(this.filesService.storedImages);
+    this.filesService.saveFiles().subscribe( res => {
+      console.log(res);
+    })
   }
 
   removeFilesFromList(index: number) {

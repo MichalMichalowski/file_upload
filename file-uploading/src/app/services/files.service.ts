@@ -29,8 +29,10 @@ export class FilesService {
    }
 
   public saveFiles(): Observable<string> {
-    const files = this.convertToFormData(this.imagesSubject.value);
-    return this.http.post<string>(`${this.apiBaseUrl}/upload`,files);
+    const formData = this.convertToFormData(this.imagesSubject.value, this.uploadParamsSubject.value.value);
+    const uploadParams: any = this.uploadParamsSubject.value.value;
+    formData.append('test', JSON.stringify(uploadParams));
+    return this.http.post<string>(`${this.apiBaseUrl}/upload`,formData);
   }
 
   public updateImages(images: AppImage[]): void {
@@ -41,13 +43,12 @@ export class FilesService {
     this.uploadParamsSubject.next(params);
   }
 
-  private convertToFormData(files: AppImage[]): FormData {
+  private convertToFormData(files: AppImage[], uploadParams: any): FormData {
     const formData: FormData = new FormData();
 
     files.forEach( (file) => {
       formData.append('files', file.fileObj, file.fileObj.name);
     } );
-
     return formData;
   }
 }

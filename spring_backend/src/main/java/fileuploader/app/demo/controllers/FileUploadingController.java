@@ -1,5 +1,8 @@
 package fileuploader.app.demo.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fileuploader.app.demo.models.UploadParams;
 import fileuploader.app.demo.services.UploadingService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +21,10 @@ public class FileUploadingController {
     private final UploadingService uploadingService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadNewFile(@RequestParam("files") List<MultipartFile> files) {
+    public ResponseEntity<String> uploadNewFile(@RequestParam("files") List<MultipartFile> files,
+                                                @RequestParam("test") String test) throws JsonProcessingException {
+        ObjectMapper ob = new ObjectMapper();
+        UploadParams params = ob.readValue(test, UploadParams.class);
         return ResponseEntity.status(HttpStatus.OK).body(uploadingService.uploadFiles(files, PATH_TO_UPLOAD));
     }
 }

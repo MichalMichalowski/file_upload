@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { FilesService } from 'src/app/services/files.service';
 import { AppImage } from '../../models/image';
+import { SendingParams } from 'src/app/models/sending-params';
 
 @Component({
   selector: 'app-upload-file',
@@ -12,15 +13,13 @@ export class UploadFileComponent implements OnInit {
 
   form: FormGroup;
   images: AppImage[] = [];
+  params: SendingParams = new SendingParams();
 
   constructor(private formBuilder: FormBuilder,
               private filesService: FilesService) { }
 
   ngOnInit(): void {
-    this.form = this.formBuilder.group({
-      uploadChoice: new FormControl('localFolder'),
-      path: new FormControl('')
-  });
+  this.fetchParams();
   this.fetchImages();
   }
   
@@ -56,14 +55,21 @@ export class UploadFileComponent implements OnInit {
     }
   }
 
-  onRadioChange() {
-    console.log(this.form.value);
+  public updateParams() {
+    this.filesService.updateParams(this.form);
   }
 
   private fetchImages(): void {
     this.filesService.appImages$.subscribe( data => {
       this.images = data;
     }); 
+  }
+
+  private fetchParams(): void {
+    this.filesService.uploadParams$.subscribe( par => {
+      this.form = par;
+    });
+    
   }
 
 }

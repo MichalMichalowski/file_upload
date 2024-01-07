@@ -1,21 +1,29 @@
 import { Injectable } from '@angular/core';
 import { AppImage } from '../models/image';
-import { Observable, of } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilesService {
 
-  storedImages: AppImage[] = [];
+  private imagesSubject = new BehaviorSubject<AppImage[]>([]);
+  appImages$ = this.imagesSubject.asObservable();
+
+  //storedImages: AppImage[] = [];
+  pathToSaveFiles: string;
   apiBaseUrl = 'http://localhost:8080/api/v1/files';
 
   constructor(private http: HttpClient) { }
 
   public saveFiles(): Observable<string> {
-    const files = this.convertToFormData(this.storedImages);
+    const files = this.convertToFormData(this.imagesSubject.value);
     return this.http.post<string>(`${this.apiBaseUrl}/upload`,files);
+  }
+
+  public updateImages(images: AppImage[]): void {
+    this.imagesSubject.next(images);
   }
 
   private convertToFormData(files: AppImage[]): FormData {

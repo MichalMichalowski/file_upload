@@ -18,27 +18,29 @@ export class UploadFileComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      uploadChoice: new FormControl('localFolder')
+      uploadChoice: new FormControl('localFolder'),
+      path: new FormControl('')
   });
-  this.images = this.getStoredImages();
+  this.fetchImages();
   }
   
   uploadFiles() {
-    console.log(this.filesService.storedImages);
     this.filesService.saveFiles().subscribe( res => {
       console.log(res);
-    })
+    });
   }
 
   removeFilesFromList(index: number) {
-    if (this.filesService.storedImages && this.filesService.storedImages.length > 0) {
-      this.filesService.storedImages.splice(index,1);
-      this.images = this.getStoredImages();
+    if (this.images && this.images.length > 0) {
+      this.images.splice(index,1);
+      this.filesService.updateImages(this.images);
+      this.fetchImages();
     }
   }
 
   onFilesSelected(event: any) {
     const filesList: File[] = event.target.files;
+    const selectedImages: AppImage[] = [];
     for (let i = 0; i < filesList.length; i++) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -46,15 +48,22 @@ export class UploadFileComponent implements OnInit {
           fileObj: filesList[i],
           imageSrc: e.target?.result ? e.target?.result : null
         };
-        //this.images.push(fileWithPreview);
-        this.filesService.storedImages.push(fileWithPreview);
+        selectedImages.push(fileWithPreview);
       };
       reader.readAsDataURL(filesList[i]);
+      this.filesService.updateImages(selectedImages);
+      this.fetchImages();
     }
   }
 
-  getStoredImages(): AppImage[] {
-    return this.filesService.storedImages;
+  onRadioChange() {
+    console.log(this.form.value);
+  }
+
+  private fetchImages(): void {
+    this.filesService.appImages$.subscribe( data => {
+      this.images = data;
+    }); 
   }
 
 }

@@ -1,13 +1,15 @@
 <form [formGroup]="form">
     <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" formControlName="uploadChoice" id="inlineRadio1"
-            value="localFolder">
+            value="localFolder" (change)="onRadioChange()">
         <label class="form-check-label" for="inlineRadio1">Save locally</label>
     </div>
     <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" formControlName="uploadChoice" id="inlineRadio2" value="backend">
+        <input class="form-check-input" type="radio" formControlName="uploadChoice" id="inlineRadio2" value="backend" (change)="onRadioChange()">
         <label class="form-check-label" for="inlineRadio2">Save in MinIO</label>
     </div>
+    <input *ngIf="form.get('uploadChoice')?.value == 'localFolder'" class="form-control" type="text" placeholder="Insert path" 
+    formControlName="path">
 </form>
 
 <div class="container mt-5">

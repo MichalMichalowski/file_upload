@@ -1,5 +1,7 @@
 package fileuploader.app.demo.services;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,9 +15,9 @@ import java.util.List;
 @Service
 public class UploadingService {
 
-    public String uploadFiles(List<MultipartFile> files, String path) {
+    public ResponseEntity<String> uploadFiles(List<MultipartFile> files, String path) {
         if (files.isEmpty()) {
-            return "No files provided";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No files provided");
         }
         try {
             for (MultipartFile file : files) {
@@ -25,10 +27,9 @@ public class UploadingService {
                     Files.write(pathToWrite, bytes);
                 }
             }
-            return "Files sent to: " + path;
+            return ResponseEntity.status(HttpStatus.OK).body("Files sent to: " + path);
         } catch (IOException e) {
-            e.printStackTrace();
-            return "Error while sending files: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.OK).body("Error while sending files: " + e.getMessage());
         }
 
     }

@@ -14,13 +14,14 @@
 
 <div class="container mt-5">
     <h3>Selected files</h3>
+    <ngb-progressbar class="mb-3" type="info" [value]="progress" [striped]="true" />
     <div class="row">
         <div class="col-3">
             <button class="col-12 btn btn-primary" (click)="fileInput.click()"><i class="bi bi-plus-circle-fill"></i>
                 Add</button>
         </div>
         <div class="col-3">
-            <button class="col-12 btn btn-primary" (click)="uploadFiles()"><i class="bi bi-cloud-upload-fill"></i>
+            <button class="col-12 btn btn-primary" [disabled]="!(!!images && images.length > 0)" (click)="uploadFiles()"><i class="bi bi-cloud-upload-fill"></i>
                 Send</button>
         </div>
     </div>

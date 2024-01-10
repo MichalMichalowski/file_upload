@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { FilesService } from 'src/app/services/files.service';
 import { AppImage } from '../../models/image';
 import { SendingParams } from 'src/app/models/sending-params';
@@ -14,18 +14,22 @@ export class UploadFileComponent implements OnInit {
   form: FormGroup;
   images: AppImage[] = [];
   params: SendingParams = new SendingParams();
+  progress: number = 0;
 
-  constructor(private formBuilder: FormBuilder,
-              private filesService: FilesService) { }
+  constructor(private filesService: FilesService) { }
 
   ngOnInit(): void {
   this.fetchParams();
   this.fetchImages();
+  this.filesService.progress$.subscribe((progress) => {
+    this.progress = progress;
+  });
   }
   
   uploadFiles() {
     this.filesService.saveFiles().subscribe( res => {
       console.log(res);
+      //this.progress = 0;
     });
   }
 

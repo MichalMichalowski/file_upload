@@ -17,14 +17,13 @@ import java.util.List;
 @AllArgsConstructor
 public class FileUploadingController {
 
-    private final String PATH_TO_UPLOAD = "C:\\test_upload";
     private final UploadingService uploadingService;
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadNewFile(@RequestParam("files") List<MultipartFile> files,
-                                                @RequestParam("test") String test) throws JsonProcessingException {
+                                                @RequestParam("requestParams") String requestParams) throws JsonProcessingException {
         ObjectMapper ob = new ObjectMapper();
-        UploadParams params = ob.readValue(test, UploadParams.class);
-        return ResponseEntity.status(HttpStatus.OK).body(uploadingService.uploadFiles(files, PATH_TO_UPLOAD));
+        UploadParams params = ob.readValue(requestParams, UploadParams.class);
+        return uploadingService.uploadFiles(files, params.getPath());
     }
 }
